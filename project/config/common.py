@@ -22,10 +22,20 @@ class Common(Configuration):
         # Third party apps
         "rest_framework",  # utilities for rest apis
         "rest_framework.authtoken",  # token authentication
-        "django_filters",  # for filtering rest endpoints
+        "django_filters",  # for filtering rest endpoints 
         "djoser",
         # Your apps
         "project.users",
+        "project.homepage",
+        "project.search",
+        "project.category",
+        "project.brand",
+        "project.preview",
+        "project.order",
+        "project.review",
+        "project.reply",
+        "project.rating",
+        "project.product_filter",
     )
 
     # https://docs.djangoproject.com/en/2.0/topics/http/middleware/
@@ -60,6 +70,7 @@ class Common(Configuration):
     }
 
     # General
+    
     APPEND_SLASH = False
     TIME_ZONE = "UTC"
     LANGUAGE_CODE = "en-us"
@@ -102,7 +113,8 @@ class Common(Configuration):
 
     # Set DEBUG to False as a default for safety
     # https://docs.djangoproject.com/en/dev/ref/settings/#debug
-    DEBUG = strtobool(os.getenv("DJANGO_DEBUG", "no"))
+    #DEBUG = strtobool(os.getenv("DJANGO_DEBUG", "no"))
+    DEBUG = True
 
     # Password Validation
     # https://docs.djangoproject.com/en/2.0/topics/auth/passwords/#module-django.contrib.auth.password_validation
@@ -175,6 +187,7 @@ class Common(Configuration):
         },
     }
 
+
     # Custom user app
     AUTH_USER_MODEL = "users.User"
 
@@ -188,13 +201,17 @@ class Common(Configuration):
             "rest_framework.renderers.BrowsableAPIRenderer",
         ),
         "DEFAULT_PERMISSION_CLASSES": [
-            "rest_framework.permissions.IsAuthenticated",
+            #"rest_framework.permissions.IsAuthenticated",
+            'rest_framework.permissions.AllowAny',
         ],
         "DEFAULT_AUTHENTICATION_CLASSES": (
             "rest_framework.authentication.SessionAuthentication",
             "rest_framework.authentication.TokenAuthentication",
             "rest_framework_simplejwt.authentication.JWTAuthentication",
         ),
+        'DEFAULT_FILTER_BACKENDS': (
+        'django_filters.rest_framework.DjangoFilterBackend',
+    ),
     }
 
     SIMPLE_JWT = {
@@ -209,9 +226,9 @@ class Common(Configuration):
         "PASSWORD_RESET_CONFIRM_URL": "#/password/reset/confirm/{uid}/{token}",
         "USERNAME_RESET_CONFIRM_URL": "#/username/reset/confirm/{uid}/{token}",
         "ACTIVATION_URL": "activate/{uid}/{token}",
-        "SEND_ACTIVATION_EMAIL": True,
+        "SEND_ACTIVATION_EMAIL": False,
         "LOGIN_FIELD": "email",
-        # "SERIALIZERS": {},
+        "SERIALIZERS": {'user_create': 'project.users.serializers.UserRegistrationSerializer'}, 
     }
 
     # Custom Settings
@@ -227,3 +244,6 @@ class Common(Configuration):
     ]
     CSRF_TRUSTED_ORIGINS = CORS_ALLOWED_ORIGINS
     CORS_ALLOW_HEADERS = list(default_headers)
+    
+    #Configure DEFAULT_AUTO_FIELD in settings
+    DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'

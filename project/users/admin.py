@@ -9,6 +9,7 @@ class UserAdmin(UserAdmin):
     list_display = (
         "id",
         "email",
+        "date_of_birth",
         "is_active",
         "is_staff",
         "date_joined",
